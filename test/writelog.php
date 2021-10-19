@@ -2,6 +2,8 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Chrissileinus\React\Log;
+use Chrissileinus\React\Log\Level;
+use Chrissileinus\React\Log\Writer;
 
 Log\Writer::targets([
   new Log\Target(
@@ -14,16 +16,24 @@ Log\Writer::targets([
   ),
 ]);
 
+$statusBar = function () {
+  Log\Writer::write(Log\Writer::$lineReset.'test'.PHP_EOL.'test'.PHP_EOL, Level::NONE, false);
+};
+
+Log\Writer::config([
+  'timeZone' => "Europe/Berlin",
+  'lineReset' => "\e[2K\e[1A\e[2K\e[1A\e[2K\r",
+  'lineEnd' => PHP_EOL.PHP_EOL.PHP_EOL,
+  'postWrite' => $statusBar
+]);
+
+echo PHP_EOL.PHP_EOL.PHP_EOL;
 
 Log\Writer::log(Log\Level::DEBUG, "oh toll", "main");
 Log\Writer::log(Log\Level::INFO, "es läuft", "main");
-
-Log\Writer::config([
-  'timeZone' => "Europe/Berlin"
-]);
-
 Log\Writer::log(Log\Level::WARNING, "hmmm", "main");
 Log\Writer::log(Log\Level::ERROR, "nicht", "main");
 Log\Writer::log(Log\Level::NOTICE, "lalala", "main");
 Log\Writer::log(Log\Level::CRITICAL, "hilfe alles läuft schief........", "main");
+Log\Writer::log(Log\Level::NONE, "nulllllll", "main");
 Log\Writer::log(Log\Level::NONE, "nulllllll", "main");

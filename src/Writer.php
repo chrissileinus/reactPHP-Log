@@ -23,6 +23,8 @@ class Writer {
     '/(\S+)::(\S+)/' => "\e[36m$1\e[0m::\e[36m$2\e[0m",
   ];
 
+  static private $postWrite;
+
   static public array $history = [];
 
   static private array $targets = [];
@@ -35,6 +37,8 @@ class Writer {
       self::$lineEnd = $lineEnd;
     if (isset($lineFormat))
       self::$lineFormat = $lineFormat;
+    if (isset($postWrite) && is_callable($postWrite))
+      self::$postWrite = $postWrite;
 
     if (isset($timeZone) && in_array($timeZone, timezone_identifiers_list()))
       self::$timeZone = $timeZone;
@@ -51,19 +55,23 @@ class Writer {
     }
   }
 
-  static public function write(string $output, $level, bool $inFile = true) {
+  static public function write(string $output, $level = Level::NONE, bool $inFile = true) {
     foreach (self::$targets as $target) {
       if ($level >= $target->minLevel) {
         if ($target->stream instanceof \React\Stream\WritableResourceStream) {
-          if ($target->isFile && $inFile) $target->stream->write($output.PHP_EOL);
-          if (!$target->isFile)           $target->stream->write(self::$lineReset.$output.self::$lineEnd);
-          continue;
+          if ($target->isFile && $inFile) {
+            $tmp = $output;
+            // $tmp = preg_replace('/\e[[][A-Za-z0-9]{1,2};?[0-9]*m?/', '', $tmp);
+            $tmp = trim($tmp, "\e[2K\e[1A");
+            $tmp = trim($tmp).PHP_EOL;
+            $target->stream->write($tmp);
+          }
+          if (!$target->isFile)           $target->stream->write($output);
         }
         if ($target->stream instanceof \React\Socket\LimitingServer) {
           foreach ($target->stream->getConnections() as $connection) {
-            $connection->write(self::$lineReset.$output.self::$lineEnd);
+            $connection->write($output);
           }
-          continue;
         }
       }
     }
@@ -93,10 +101,16 @@ class Writer {
       preg_replace(array_keys(self::$styleFilter), array_values(self::$styleFilter), $message),
     );
 
-    self::write($output, $level);
+    self::write(self::$lineReset.$output.self::$lineEnd, $level);
     self::pushInHistory(self::$lineReset.$output.self::$lineEnd);
 
-    if (is_callable($postWrite)) $postWrite();
+    if (is_callable($postWrite)) {
+      call_user_func($postWrite);
+      return;
+    }
+    if (is_callable(self::$postWrite)) {
+      call_user_func(self::$postWrite);
+    }
   }
 
   static public function debug($message, $rubric, callable $postWrite = null) {
