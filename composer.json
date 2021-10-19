@@ -1,0 +1,19 @@
+{
+    "name": "chrissileinus/reactphp-log",
+    "type": "library",
+    "authors": [
+        {
+            "name": "chrissileinus",
+            "email": "chrissileinus@googlemail.com"
+        }
+    ],
+    "require": {
+        "react/stream": "^1.2",
+        "react/socket": "^1.9"
+    },
+    "autoload": {
+      "psr-4": {
+        "Chrissileinus\\React\\Log\\": "src/"
+      }
+    }
+}
