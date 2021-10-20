@@ -10,4 +10,5 @@ abstract class Level extends Enum {
   const CRITICAL  = 600;
   const ALERT     = 700;
   const EMERGENCY = 800;
+  const GLOBAL    = 10000;
 }
