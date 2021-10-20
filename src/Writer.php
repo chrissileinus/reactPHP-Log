@@ -55,19 +55,18 @@ class Writer {
     }
   }
 
-  static public function write(string $output, $level = Level::NONE, bool $inFile = true) {
+  static public function write(string $output, $level = Level::NONE, bool $writeIntoFile = true) {
     foreach (self::$targets as $target) {
       if ($level >= $target->minLevel || $target->minLevel == Level::NONE) {
         if ($target->stream instanceof \React\Stream\WritableResourceStream) {
-          if ($target->isFile && $inFile) {
+          if ($target->isFile && $writeIntoFile) {
             $tmp = $output;
             // $tmp = preg_replace('/\e[[][A-Za-z0-9]{1,2};?[0-9]*m?/', '', $tmp);
             $tmp = trim($tmp, "\e[2K\e[1A");
             $tmp = trim($tmp).PHP_EOL;
             $target->stream->write($tmp);
-            continue;
           }
-          $target->stream->write($output);
+          if (!$target->isFile) $target->stream->write($output);
         }
         if ($target->stream instanceof \React\Socket\LimitingServer) {
           foreach ($target->stream->getConnections() as $connection) {
