@@ -13,6 +13,7 @@ class Writer {
   static private string $colorizeReset = "\e[0m";
   static private array $colorizeLevel = [
     Level::DEBUG => "\e[36m",
+    Level::INFO  => "\e[0m",
     Level::ERROR => "\e[31m",
     Level::WARNING => "\e[33m"
   ];

@@ -25,4 +25,7 @@ abstract class Enum {
   }
   }
 
+  final public static function getConstant ($value) {
+    return static::toArray()[$value];
+  }
 }
