@@ -57,7 +57,7 @@ class Writer {
 
   static public function write(string $output, $level = Level::NONE, bool $inFile = true) {
     foreach (self::$targets as $target) {
-      if ($level >= $target->minLevel) {
+      if ($level >= $target->minLevel || $target->minLevel == Level::NONE) {
         if ($target->stream instanceof \React\Stream\WritableResourceStream) {
           if ($target->isFile && $inFile) {
             $tmp = $output;
@@ -65,8 +65,9 @@ class Writer {
             $tmp = trim($tmp, "\e[2K\e[1A");
             $tmp = trim($tmp).PHP_EOL;
             $target->stream->write($tmp);
+            continue;
           }
-          if (!$target->isFile)           $target->stream->write($output);
+          $target->stream->write($output);
         }
         if ($target->stream instanceof \React\Socket\LimitingServer) {
           foreach ($target->stream->getConnections() as $connection) {
