@@ -10,6 +10,8 @@ class Writer {
   static private string $timeZone = "GMT";
   static private string $timeFormat = "Y.m.d H:i:s";
 
+  static private array $ignore = [];
+
   static private string $colorizeReset = "\e[0m";
   static private array $colorizeLevel = [
     Level::DEBUG => "\e[36m",
@@ -38,11 +40,14 @@ class Writer {
       self::$lineEnd = $lineEnd;
     if (isset($lineFormat))
       self::$lineFormat = $lineFormat;
-    if (isset($postWrite) && is_callable($postWrite))
+      if (isset($postWrite) && is_callable($postWrite))
       self::$postWrite = $postWrite;
 
     if (isset($timeZone) && in_array($timeZone, timezone_identifiers_list()))
       self::$timeZone = $timeZone;
+
+    if (isset($ignore))
+      self::$ignore = $ignore;
   }
 
   static public function targets(array $targets) {
@@ -56,9 +61,24 @@ class Writer {
     }
   }
 
-  static public function write(string $output, $level = Level::NONE, bool $writeIntoFile = true) {
+  static public function write(string $output, bool $writeIntoFile = true, $level = Level::NONE, string $rubric = '') {
     foreach (self::$targets as $target) {
-      if ($level >= $target->minLevel || $target->minLevel == Level::NONE) {
+      if (
+        (
+          $level >= $target->minLevel ||
+          $target->minLevel == Level::NONE
+        ) &&
+        !(
+          is_array(self::$ignore) &&
+          array_key_exists($rubric, self::$ignore) &&
+          $level == self::$ignore[$rubric]
+        ) &&
+        !(
+          is_array($target->ignore) &&
+          array_key_exists($rubric, $target->ignore) &&
+          $level == $target->ignore[$rubric]
+        )
+      ) {
         if ($target->stream instanceof \React\Stream\WritableResourceStream) {
           if ($target->isFile && $writeIntoFile) {
             $tmp = $output;
@@ -102,7 +122,7 @@ class Writer {
       preg_replace(array_keys(self::$styleFilter), array_values(self::$styleFilter), $message),
     );
 
-    self::write(self::$lineReset.$output.self::$lineEnd, $level);
+    self::write(self::$lineReset.$output.self::$lineEnd, true, $level, $rubric);
     self::pushInHistory(self::$lineReset.$output.self::$lineEnd);
 
     if (is_callable($postWrite)) {
