@@ -15,13 +15,13 @@ Log\Writer::targets([
 ]);
 
 $statusBar = function () {
-  Log\Writer::write(Log\Writer::$lineReset."test".PHP_EOL."test"."\r", Log\Level::NONE, false);
+  Log\Writer::write(Log\Writer::$lineReset . "test" . PHP_EOL . "test" . "\r", false);
 };
 
 Log\Writer::config([
   'timeZone' => "Europe/Berlin",
   'lineReset' => "\e[2K\e[1A\e[2K\r",
-  'lineEnd' => PHP_EOL.PHP_EOL,
+  'lineEnd' => PHP_EOL . PHP_EOL,
   'postWrite' => $statusBar
 ]);
 
@@ -35,7 +35,7 @@ React\EventLoop\Loop::addPeriodicTimer(1, function () {
   Log\Writer::log(Log\Level::NONE, "nulllllll", "main");
 });
 
-echo "\e[?25l". PHP_EOL; // hide cursor in cli
+echo "\e[?25l" . PHP_EOL; // hide cursor in cli
 
 //  on signal SIGINT
 React\EventLoop\Loop::addSignal(SIGINT, function () {
@@ -49,4 +49,4 @@ React\EventLoop\Loop::addSignal(SIGINT, function () {
 
 React\EventLoop\Loop::run();
 
-echo "\e[?25h". PHP_EOL; // show cursor in cli
+echo "\e[?25h" . PHP_EOL; // show cursor in cli
