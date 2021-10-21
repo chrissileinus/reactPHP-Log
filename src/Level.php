@@ -1,7 +1,9 @@
 <?php
+
 namespace Chrissileinus\React\Log;
 
-abstract class Level extends Enum {
+abstract class Level extends Enum
+{
   const DEBUG     = 100;
   const INFO      = 200;
   const NOTICE    = 300;
