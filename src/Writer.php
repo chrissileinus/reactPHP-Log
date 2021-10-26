@@ -4,7 +4,7 @@ namespace Chrissileinus\React\Log;
 
 class Writer
 {
-  static public string $lineReset = "";
+  static public string $lineReset = "\r\e[K";
   static public string $lineEnd = PHP_EOL;
 
   static public string $lineFormat = "%s ⁞%s %10s\e[0m:%s%-10s \e[0m⁞ %s\e[0m";
@@ -90,7 +90,7 @@ class Writer
           if ($target->isFile && $writeIntoFile) {
             $tmp = $output;
             // $tmp = preg_replace('/\e[[][A-Za-z0-9]{1,2};?[0-9]*m?/', '', $tmp);
-            $tmp = trim($tmp, "\e[2K\e[1A");
+            $tmp = trim($tmp, "\e[2K\e[1A\e[K");
             $tmp = trim($tmp) . PHP_EOL;
             $target->stream->write($tmp);
           }
