@@ -1,19 +1,20 @@
 {
-    "name": "chrissileinus/reactphp-log",
-    "type": "library",
-    "authors": [
-        {
-            "name": "chrissileinus",
-            "email": "chrissileinus@googlemail.com"
-        }
-    ],
-    "require": {
-        "react/stream": "^1.2",
-        "react/socket": "^1.9"
-    },
-    "autoload": {
-      "psr-4": {
-        "Chrissileinus\\React\\Log\\": "src/"
-      }
+  "name": "chrissileinus/reactphp-log",
+  "type": "library",
+  "authors": [
+    {
+      "name": "chrissileinus",
+      "email": "chrissileinus@googlemail.com"
     }
+  ],
+  "require": {
+    "react/stream": "^1.2",
+    "react/socket": "^1.9",
+    "nicmart/string-template": "^0.1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Chrissileinus\\React\\Log\\": "src/"
+    }
+  }
 }

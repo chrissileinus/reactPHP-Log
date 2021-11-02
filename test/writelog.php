@@ -39,10 +39,13 @@ echo "\e[?25l" . PHP_EOL; // hide cursor in cli
 
 //  on signal SIGINT
 React\EventLoop\Loop::addSignal(SIGINT, function () {
-  Log\Writer::info(sprintf(
-    "Stop with pid:%d",
-    posix_getpid()
-  ), 'main');
+  Log\Writer::info(
+    sprintf(
+      "Stop with pid:%d",
+      posix_getpid()
+    ),
+    'main'
+  );
 
   React\EventLoop\Loop::stop();
 });

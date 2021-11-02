@@ -7,7 +7,7 @@ class Writer
   static public string $lineReset = "\r\e[K";
   static public string $lineEnd = PHP_EOL;
 
-  static public string $lineFormat = "%s ⁞%s %10s\e[0m:%s%-10s \e[0m⁞ %s\e[0m";
+  static public string $lineFormat = "{time} ⁞{color.open} {rubric%10s}{color.close}:{color.open}{level%-10s} {color.close}⁞ {content}";
 
   static private string $timeZone = "GMT";
   static private string $timeFormat = "Y.m.d H:i:s";
@@ -88,17 +88,14 @@ class Writer
       ) {
         if ($target->stream instanceof \React\Stream\WritableResourceStream) {
           if ($target->isFile && $writeIntoFile) {
-            $tmp = $output;
-            // $tmp = preg_replace('/\e[[][A-Za-z0-9]{1,2};?[0-9]*m?/', '', $tmp);
-            $tmp = trim($tmp, "\e[2K\e[1A\e[K");
-            $tmp = trim($tmp) . PHP_EOL;
-            $target->stream->write($tmp);
+            $tmp = preg_replace('/\e[[][A-Za-z0-9]{1,2};?[0-9]*m?/', '', $output);
+            $target->stream->write($tmp . PHP_EOL);
           }
-          if (!$target->isFile) $target->stream->write($output);
+          if (!$target->isFile) $target->stream->write(self::$lineReset . $output . self::$lineEnd);
         }
         if ($target->stream instanceof \React\Socket\LimitingServer) {
           foreach ($target->stream->getConnections() as $connection) {
-            $connection->write($output);
+            $connection->write(self::$lineReset . $output . self::$lineEnd);
           }
         }
       }
@@ -107,7 +104,7 @@ class Writer
 
   static protected function pushInHistory(string $string)
   {
-    array_push(self::$history, $string);
+    array_push(self::$history, self::$lineReset . $string . self::$lineEnd);
     if (count(self::$history) > 50) array_shift(self::$history);
   }
 
@@ -121,18 +118,22 @@ class Writer
       }
     }
 
-    $output = sprintf(
-      self::$lineFormat,
-      (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat),
-      $highlight,
-      $rubric,
-      $highlight,
-      Level::getName($level),
-      preg_replace(array_keys(self::$styleFilter), array_values(self::$styleFilter), $message),
-    );
+    $replacements = [
+      'time' => (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat),
+      'rubric' => $rubric,
+      'level' => Level::getName($level),
+      'content' => preg_replace(array_keys(self::$styleFilter), array_values(self::$styleFilter), $message),
 
-    self::write(self::$lineReset . $output . self::$lineEnd, true, $level, $rubric);
-    self::pushInHistory(self::$lineReset . $output . self::$lineEnd);
+      'color' => [
+        'open' => $highlight,
+        'close' => self::$colorizeReset,
+      ],
+    ];
+
+    $output = (new \StringTemplate\SprintfEngine)->render(self::$lineFormat, $replacements);
+
+    self::write($output, true, $level, $rubric);
+    self::pushInHistory($output);
 
     if (is_callable($postWrite)) {
       call_user_func($postWrite);
