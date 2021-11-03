@@ -4,8 +4,77 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "406674139631e4bdf8276b9b0d4df87b",
+    "content-hash": "22f2df89b0fba2043af136147f41ba04",
     "packages": [
+        {
+            "name": "chrissileinus/ansi-php",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/chrissileinus/ansiPHP.git",
+                "reference": "c25c3450072da5fb84092d98fcb8ca15533a535d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/chrissileinus%2FansiPHP/repository/archive.zip?sha=c25c3450072da5fb84092d98fcb8ca15533a535d",
+                "reference": "c25c3450072da5fb84092d98fcb8ca15533a535d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Chrissileinus\\Ansi\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "chrissileinus",
+                    "email": "chrissileinus@googlemail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/30778519/issues"
+            },
+            "time": "2021-11-03T06:16:53+00:00"
+        },
+        {
+            "name": "chrissileinus/template-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/chrissileinus/templatePHP.git",
+                "reference": "1a6b4cc8dad7f81b3daea2068ede501177f87055"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/chrissileinus%2FtemplatePHP/repository/archive.zip?sha=1a6b4cc8dad7f81b3daea2068ede501177f87055",
+                "reference": "1a6b4cc8dad7f81b3daea2068ede501177f87055",
+                "shasum": ""
+            },
+            "require": {
+                "chrissileinus/ansi-php": ">=0.1.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Chrissileinus\\Template\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Christian Backus",
+                    "email": "chrissileinus@googlemail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/30974672/issues"
+            },
+            "time": "2021-11-03T09:20:52+00:00"
+        },
         {
             "name": "evenement/evenement",
             "version": "v3.0.1",
@@ -47,51 +116,11 @@
                 "event-dispatcher",
                 "event-emitter"
             ],
-            "time": "2017-07-23T21:35:13+00:00"
-        },
-        {
-            "name": "nicmart/string-template",
-            "version": "v0.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nicmart/StringTemplate.git",
-                "reference": "d22315ff2c3969148f2a197d1ada429899f20f79"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nicmart/StringTemplate/zipball/d22315ff2c3969148f2a197d1ada429899f20f79",
-                "reference": "d22315ff2c3969148f2a197d1ada429899f20f79",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2",
-                "phpunit/phpunit": "^8 || ^9"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "StringTemplate\\": "src/StringTemplate/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolò Martini",
-                    "email": "nicmartnic@gmail.com"
-                }
-            ],
-            "description": "StringTemplate is a very simple string template engine for php. I've written it to have a thing like sprintf, but with named and nested substutions.",
             "support": {
-                "issues": "https://github.com/nicmart/StringTemplate/issues",
-                "source": "https://github.com/nicmart/StringTemplate/tree/v0.1.2"
+                "issues": "https://github.com/igorw/evenement/issues",
+                "source": "https://github.com/igorw/evenement/tree/master"
             },
-            "time": "2021-04-22T18:14:44+00:00"
+            "time": "2017-07-23T21:35:13+00:00"
         },
         {
             "name": "react/cache",
@@ -153,6 +182,10 @@
                 "promise",
                 "reactphp"
             ],
+            "support": {
+                "issues": "https://github.com/reactphp/cache/issues",
+                "source": "https://github.com/reactphp/cache/tree/v1.1.1"
+            },
             "funding": [
                 {
                     "url": "https://github.com/WyriHaximus",
@@ -229,6 +262,10 @@
                 "dns-resolver",
                 "reactphp"
             ],
+            "support": {
+                "issues": "https://github.com/reactphp/dns/issues",
+                "source": "https://github.com/reactphp/dns/tree/v1.8.0"
+            },
             "funding": [
                 {
                     "url": "https://github.com/WyriHaximus",
@@ -303,6 +340,10 @@
                 "asynchronous",
                 "event-loop"
             ],
+            "support": {
+                "issues": "https://github.com/reactphp/event-loop/issues",
+                "source": "https://github.com/reactphp/event-loop/tree/v1.2.0"
+            },
             "funding": [
                 {
                     "url": "https://github.com/WyriHaximus",
@@ -359,6 +400,10 @@
                 "promise",
                 "promises"
             ],
+            "support": {
+                "issues": "https://github.com/reactphp/promise/issues",
+                "source": "https://github.com/reactphp/promise/tree/v2.8.0"
+            },
             "time": "2020-05-12T15:16:56+00:00"
         },
         {
@@ -428,6 +473,10 @@
                 "timeout",
                 "timer"
             ],
+            "support": {
+                "issues": "https://github.com/reactphp/promise-timer/issues",
+                "source": "https://github.com/reactphp/promise-timer/tree/v1.7.0"
+            },
             "funding": [
                 {
                     "url": "https://github.com/WyriHaximus",
@@ -508,6 +557,10 @@
                 "reactphp",
                 "stream"
             ],
+            "support": {
+                "issues": "https://github.com/reactphp/socket/issues",
+                "source": "https://github.com/reactphp/socket/tree/v1.9.0"
+            },
             "funding": [
                 {
                     "url": "https://github.com/WyriHaximus",
@@ -586,6 +639,10 @@
                 "stream",
                 "writable"
             ],
+            "support": {
+                "issues": "https://github.com/reactphp/stream/issues",
+                "source": "https://github.com/reactphp/stream/tree/v1.2.0"
+            },
             "funding": [
                 {
                     "url": "https://github.com/WyriHaximus",
@@ -602,7 +659,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "chrissileinus/template-php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

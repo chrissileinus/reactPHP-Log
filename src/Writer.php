@@ -2,35 +2,30 @@
 
 namespace Chrissileinus\React\Log;
 
+use \Chrissileinus\Template;
+
 class Writer
 {
   static public string $lineReset = "\r\e[K";
   static public string $lineEnd = PHP_EOL;
 
-  static public string $lineFormat = "{time} ⁞{color.open} {rubric%10s}{color.close}:{color.open}{level%-10s} {color.close}⁞ {content}";
+  static public string $lineFormat = "{time} ⁞{ {rubric%10s}&highlight}:{{level%-10s} &highlight}⁞ {message}";
 
   static private string $timeZone = "GMT";
   static private string $timeFormat = "Y.m.d H:i:s";
 
   static private array $ignore = [];
 
-  static private string $colorizeReset = "\e[0m";
   static private array $colorizeLevel = [
-    Level::DEBUG => "\e[36m",
-    Level::INFO => "\e[0m",
-    Level::NOTICE => "\e[33m",
-    Level::WARNING => "\e[31m\e[2m",
-    Level::ERROR => "\e[31m",
-    Level::CRITICAL => "\e[31m\e[1m",
-    Level::ALERT => "\e[31m\e[1m\e[4m",
-    Level::EMERGENCY => "\e[31m\e[1m\e[7m",
-    Level::GLOBAL => "\e[0m",
-  ];
-
-  static private array $styleFilter = [
-    '/(error):/' => "\e[31m$1\e[0m:",
-    '/(state):/' => "\e[34m$1\e[0m:",
-    '/(\S+)::(\S+)/' => "\e[36m$1\e[0m::\e[36m$2\e[0m",
+    Level::DEBUG => "f_cyan",
+    Level::INFO => "",
+    Level::NOTICE => "f_yellow",
+    Level::WARNING => "f_red,dim",
+    Level::ERROR => "f_red",
+    Level::CRITICAL => "f_red,blod",
+    Level::ALERT => "f_red,underline",
+    Level::EMERGENCY => "f_red,inverse",
+    Level::GLOBAL => "",
   ];
 
   static private $postWrite;
@@ -111,26 +106,20 @@ class Writer
   static public function log($level, $message, $rubric, callable $postWrite = null)
   {
     $highlight = "";
-    ksort(self::$colorizeLevel);
-    foreach (self::$colorizeLevel as $_Level => $_Color) {
-      if ($level >= $_Level) {
-        $highlight = $_Color;
-      }
+    if (array_key_exists($level, self::$colorizeLevel)) {
+      $highlight = self::$colorizeLevel[$level];
     }
 
     $replacements = [
       'time' => (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat),
       'rubric' => $rubric,
       'level' => Level::getName($level),
-      'content' => preg_replace(array_keys(self::$styleFilter), array_values(self::$styleFilter), $message),
+      'message' => $message,
 
-      'color' => [
-        'open' => $highlight,
-        'close' => self::$colorizeReset,
-      ],
+      'highlight' => $highlight,
     ];
 
-    $output = (new \StringTemplate\SprintfEngine)->render(self::$lineFormat, $replacements);
+    $output = Template\Str::replaceF(self::$lineFormat, $replacements);
 
     self::write($output, true, $level, $rubric);
     self::pushInHistory($output);

@@ -2,6 +2,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Chrissileinus\React\Log;
+use Chrissileinus\Ansi;
 
 Log\Writer::targets([
   new Log\Target(
@@ -15,13 +16,12 @@ Log\Writer::targets([
 ]);
 
 $statusBar = function () {
-  Log\Writer::write(Log\Writer::$lineReset . "test" . PHP_EOL . "test" . "\r", false);
+  Log\Writer::write(Log\Writer::$lineReset . "test" . PHP_EOL . "test" . "\r" . Ansi\Cursor::prevLine(1) . Ansi\Cursor::prevLine(1), false);
 };
 
 Log\Writer::config([
   'timeZone' => "Europe/Berlin",
-  'lineReset' => "\e[2K\e[1A\e[2K\r",
-  'lineEnd' => PHP_EOL . PHP_EOL,
+  'lineReset' => Ansi\Clear::line(Ansi\Clear::All) . Ansi\Cursor::newLine() . Ansi\Clear::line(Ansi\Clear::All) . Ansi\Cursor::prevLine(1),
   'postWrite' => $statusBar
 ]);
 
