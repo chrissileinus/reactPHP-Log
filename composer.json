@@ -1,6 +1,8 @@
 {
   "name": "chrissileinus/reactphp-log",
   "type": "library",
+  "description": "",
+  "license": "MIT",
   "authors": [
     {
       "name": "chrissileinus",
