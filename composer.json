@@ -1,7 +1,7 @@
 {
   "name": "chrissileinus/reactphp-log",
   "type": "library",
-  "description": "",
+  "description": "A logger similar to the PSR-3: Logger Interface but add the ability of variable rubrics byside to level.",
   "license": "MIT",
   "authors": [
     {
