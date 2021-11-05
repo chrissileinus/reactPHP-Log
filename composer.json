@@ -1,7 +1,7 @@
 {
   "name": "chrissileinus/reactphp-log",
   "type": "library",
-  "description": "A logger similar to the PSR-3: Logger Interface but add the ability of variable rubrics byside to level.",
+  "description": "A logger similar to the PSR-3: Logger Interface but add the ability of variable rubrics beside level.",
   "license": "MIT",
   "authors": [
     {
@@ -9,20 +9,10 @@
       "email": "chrissileinus@googlemail.com"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://gitlab.com/chrissileinus/templatePHP"
-    },
-    {
-      "type": "vcs",
-      "url": "https://gitlab.com/chrissileinus/ansiPHP"
-    }
-  ],
   "require": {
     "react/stream": "^1.2",
     "react/socket": "^1.9",
-    "chrissileinus/template-php": ">=0.1.0"
+    "chrissileinus/template-php": "dev-master"
   },
   "autoload": {
     "psr-4": {
