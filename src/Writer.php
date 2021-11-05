@@ -37,8 +37,6 @@ class Writer
 
   static private $postWrite;
 
-  static public array $history = [];
-
   static private array $targets = [];
 
   static public function config(array $config)
@@ -88,26 +86,24 @@ class Writer
           array_key_exists($rubric, $target->ignore) &&
           $level == $target->ignore[$rubric])
       ) {
+        $tmp = $output;
+        if ($target->noDecoration) {
+          $tmp = preg_replace('/\e[[][^A-Za-z]*[A-Za-z]/', '', $output);
+        }
+
         if ($target->stream instanceof \React\Stream\WritableResourceStream) {
           if ($target->isFile && $writeIntoFile) {
-            $tmp = preg_replace('/\e[[][A-Za-z0-9]{1,2};?[0-9]*m?/', '', $output);
             $target->stream->write($tmp . PHP_EOL);
           }
-          if (!$target->isFile) $target->stream->write(self::$lineReset . $output . self::$lineEnd);
+          if (!$target->isFile) $target->stream->write(self::$lineReset . $tmp . self::$lineEnd);
         }
         if ($target->stream instanceof \React\Socket\LimitingServer) {
           foreach ($target->stream->getConnections() as $connection) {
-            $connection->write(self::$lineReset . $output . self::$lineEnd);
+            $connection->write(self::$lineReset . $tmp . self::$lineEnd);
           }
         }
       }
     }
-  }
-
-  static protected function pushInHistory(string $string)
-  {
-    array_push(self::$history, self::$lineReset . $string . self::$lineEnd);
-    if (count(self::$history) > 50) array_shift(self::$history);
   }
 
   static public function log($level, $message, $rubric, callable $postWrite = null)
@@ -129,14 +125,13 @@ class Writer
     $output = Template\Str::replaceF(self::$lineFormat, $replacements);
 
     self::write($output, true, $level, $rubric);
-    self::pushInHistory($output);
 
     if (is_callable($postWrite)) {
-      call_user_func($postWrite);
+      call_user_func($postWrite, $output);
       return;
     }
     if (is_callable(self::$postWrite)) {
-      call_user_func(self::$postWrite);
+      call_user_func(self::$postWrite, $output);
     }
   }
 

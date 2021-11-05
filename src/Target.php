@@ -13,14 +13,16 @@ class Target
 {
   public $stream;
   public $minLevel;
-  public $isFile;
   public $ignore;
+  public $isFile;
+  public $noDecoration;
 
-  function __construct($stream, $minLevel = Level::NONE, $ignore = [], bool $isFile = false)
+  function __construct($stream, $minLevel = Level::NONE, $ignore = [], bool $isFile = false, bool $noDecoration = false)
   {
     $this->stream = $stream;
     $this->minLevel = $minLevel;
-    $this->isFile = $isFile;
     $this->ignore = $ignore;
+    $this->isFile = $isFile;
+    $this->noDecoration = $noDecoration;
   }
 }
