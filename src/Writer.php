@@ -75,6 +75,10 @@ class Writer
     }
   }
 
+  static public function formatedTime() {
+    (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat);
+  }
+
   static public function write(string $output, bool $writeIntoFile = true, $level = Level::NONE, string $rubric = '')
   {
     foreach (self::$targets as $target) {
@@ -90,7 +94,7 @@ class Writer
       ) {
         $tmp = $output;
         if (!$target->noTimestamp) {
-          $tmp = (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat) . $tmp;
+          $tmp = self::formatedTime() . $tmp;
         }
         if ($target->noDecoration) {
           $tmp = preg_replace('/\e[[][^A-Za-z]*[A-Za-z]/', '', $tmp);
