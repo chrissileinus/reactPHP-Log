@@ -17,12 +17,19 @@ class Target
   public $isFile;
   public $noDecoration;
 
-  function __construct($stream, $minLevel = Level::NONE, $ignore = [], bool $isFile = false, bool $noDecoration = false)
-  {
+  function __construct(
+    $stream,
+    $minLevel = Level::NONE,
+    $ignore = [],
+    bool $isFile = false,
+    bool $noDecoration = false,
+    bool $noTimestamp = false
+  ) {
     $this->stream = $stream;
     $this->minLevel = $minLevel;
     $this->ignore = $ignore;
     $this->isFile = $isFile;
     $this->noDecoration = $noDecoration;
+    $this->noTimestamp = $noTimestamp;
   }
 }

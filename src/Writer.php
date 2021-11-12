@@ -16,10 +16,10 @@ class Writer
   static public string $lineReset = "\r\e[K";
   static public string $lineEnd = PHP_EOL;
 
-  static public string $lineFormat = "{time} ⁞{ {rubric%10s}&highlight}:{{level%-10s} &highlight}⁞ {message}";
+  static public string $lineFormat = "{ {rubric%10s}&highlight}:{{level%-10s} &highlight}⁞ {message}";
 
   static private string $timeZone = "GMT";
-  static private string $timeFormat = "Y.m.d H:i:s";
+  static private string $timeFormat = "Y.m.d H:i:s ⁞";
 
   static private array $ignore = [];
 
@@ -53,6 +53,8 @@ class Writer
 
     if (isset($timeZone) && in_array($timeZone, timezone_identifiers_list()))
       self::$timeZone = $timeZone;
+    if (isset($timeFormat))
+      self::$timeFormat = $timeFormat;
 
     if (isset($ignore))
       self::$ignore = $ignore;
@@ -87,8 +89,11 @@ class Writer
           $level == $target->ignore[$rubric])
       ) {
         $tmp = $output;
+        if (!$target->noTimestamp) {
+          $tmp = (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat) . $tmp;
+        }
         if ($target->noDecoration) {
-          $tmp = preg_replace('/\e[[][^A-Za-z]*[A-Za-z]/', '', $output);
+          $tmp = preg_replace('/\e[[][^A-Za-z]*[A-Za-z]/', '', $tmp);
         }
 
         if ($target->stream instanceof \React\Stream\WritableResourceStream) {
@@ -114,7 +119,6 @@ class Writer
     }
 
     $replacements = [
-      'time' => (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat),
       'rubric' => $rubric,
       'level' => Level::getName($level),
       'message' => $message,
