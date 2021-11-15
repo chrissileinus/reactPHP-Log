@@ -76,7 +76,7 @@ class Writer
   }
 
   static public function formatedTime() {
-    (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat);
+    return (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat);
   }
 
   static public function write(string $output, bool $writeIntoFile = true, $level = Level::NONE, string $rubric = '')
