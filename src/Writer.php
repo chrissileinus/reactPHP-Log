@@ -135,11 +135,11 @@ class Writer
     self::write($output, true, $level, $rubric);
 
     if (is_callable($postWrite)) {
-      call_user_func($postWrite, $output);
+      call_user_func($postWrite, $output, $level, $rubric);
       return;
     }
     if (is_callable(self::$postWrite)) {
-      call_user_func(self::$postWrite, $output);
+      call_user_func(self::$postWrite, $output, $level, $rubric);
     }
   }
 
