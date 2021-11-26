@@ -13,27 +13,15 @@ use \Chrissileinus\Template;
 
 class Writer
 {
-  static public string $lineReset = "\r\e[K";
+  static public string $lineReset = "";
   static public string $lineEnd = PHP_EOL;
 
-  static public string $lineFormat = "{ {rubric%10s}&highlight}:{{level%-10s} &highlight}⁞ {message}";
+  static public string $lineFormat = " {rubric%10s}:{level%-10s} ⁞ {message}";
 
   static private string $timeZone = "GMT";
   static private string $timeFormat = "Y.m.d H:i:s ⁞";
 
   static private array $ignore = [];
-
-  static private array $colorizeLevel = [
-    Level::DEBUG => "f_cyan",
-    Level::INFO => "",
-    Level::NOTICE => "f_yellow",
-    Level::WARNING => "f_red,dim",
-    Level::ERROR => "f_red",
-    Level::CRITICAL => "f_red,blod",
-    Level::ALERT => "f_red,underline",
-    Level::EMERGENCY => "f_red,inverse",
-    Level::GLOBAL => "",
-  ];
 
   static private $postWrite;
 
@@ -100,7 +88,9 @@ class Writer
           $tmp = preg_replace('/\e[[][^A-Za-z]*[A-Za-z]/', '', $tmp);
         }
 
-        if ($target->stream instanceof \React\Stream\WritableResourceStream) {
+        if (
+          $target->stream instanceof \React\Stream\WritableStreamInterface
+        ) {
           if ($target->isFile && $writeIntoFile) {
             $target->stream->write($tmp . PHP_EOL);
           }
@@ -117,17 +107,10 @@ class Writer
 
   static public function log($level, $message, $rubric, callable $postWrite = null)
   {
-    $highlight = "";
-    if (array_key_exists($level, self::$colorizeLevel)) {
-      $highlight = self::$colorizeLevel[$level];
-    }
-
     $replacements = [
       'rubric' => $rubric,
       'level' => Level::getName($level),
       'message' => $message,
-
-      'highlight' => $highlight,
     ];
 
     $output = Template\Str::replaceF(self::$lineFormat, $replacements);
