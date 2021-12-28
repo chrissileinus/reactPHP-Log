@@ -21,6 +21,8 @@ class Writer
   static private string $timeZone = "GMT";
   static private string $timeFormat = "Y.m.d H:i:s ⁞";
 
+  static private $colorizeLevel;
+
   static private array $ignore = [];
 
   static private $postWrite;
@@ -63,7 +65,8 @@ class Writer
     }
   }
 
-  static public function formatedTime() {
+  static public function formatedTime()
+  {
     return (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat);
   }
 
