@@ -70,6 +70,11 @@ class Writer
     return (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat);
   }
 
+  static public function formatedTimeFromTimestamp(int $timestamp): string
+  {
+    return (new \DateTime())->setTimezone(new \DateTimeZone(self::$timeZone))->setTimestamp($timestamp)->format(self::$timeFormat);
+  }
+
   static public function write(string $output, bool $writeIntoFile = true, $level = Level::NONE, string $rubric = '')
   {
     foreach (self::$targets as $target) {
