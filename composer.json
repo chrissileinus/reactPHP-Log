@@ -13,7 +13,7 @@
     "php": ">=8.1",
     "react/stream": "^1.2",
     "react/socket": "^1.9",
-    "chrissileinus/template-php": "^0.1.0"
+    "chrissileinus/template-php": "dev-master"
   },
   "autoload": {
     "psr-4": {
