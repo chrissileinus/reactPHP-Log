@@ -9,15 +9,21 @@
 
 namespace Chrissileinus\React\Log;
 
-abstract class Level extends Enum
+enum Level: int
 {
-  const DEBUG     = 100;
-  const INFO      = 200;
-  const NOTICE    = 300;
-  const WARNING   = 400;
-  const ERROR     = 500;
-  const CRITICAL  = 600;
-  const ALERT     = 700;
-  const EMERGENCY = 800;
-  const GLOBAL    = 10000;
+  case NONE      = 0;
+  case DEBUG     = 100;
+  case INFO      = 200;
+  case NOTICE    = 300;
+  case WARNING   = 400;
+  case ERROR     = 500;
+  case CRITICAL  = 600;
+  case ALERT     = 700;
+  case EMERGENCY = 800;
+  case GLOBAL    = 10000;
+
+  static function byName(string $name)
+  {
+    return unserialize('E:' . strlen("\Chrissileinus\React\Log\Level") + 1 + strlen($name) . ':"' . "\Chrissileinus\React\Log\Level" . ':' . $name . '";');
+  }
 }

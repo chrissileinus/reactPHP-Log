@@ -117,7 +117,7 @@ class Writer
   {
     $replacements = [
       'rubric' => $rubric,
-      'level' => Level::getName($level),
+      'level' => $level->name,
       'message' => $message,
     ];
 
