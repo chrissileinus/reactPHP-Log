@@ -79,8 +79,8 @@ class Writer
   {
     foreach (self::$targets as $target) {
       if (
-        ($level >= $target->minLevel ||
-          $target->minLevel == Level::NONE) &&
+        ($level->value >= $target->minLevel->value ||
+          $target->minLevel->value == Level::NONE->value) &&
         !(is_array(self::$ignore) &&
           array_key_exists($rubric, self::$ignore) &&
           $level == self::$ignore[$rubric]) &&
