@@ -19,7 +19,7 @@ class Writer
   static public string $lineFormat = " {rubric%10s}:{level%-10s} ⁞ {message}";
 
   static private string $timeZone = "GMT";
-  static private string $timeFormat = "Y.m.d H:i:s ⁞";
+  static private string $timeFormat = "Y.m.d H:i:s";
 
   static private $colorizeLevel;
 
@@ -90,7 +90,7 @@ class Writer
       ) {
         $tmp = $output;
         if (!$target->noTimestamp) {
-          $tmp = self::formatedTime() . $tmp;
+          $tmp = self::formatedTime() . " ⁞" . $tmp;
         }
         if ($target->noDecoration) {
           $tmp = preg_replace('/\e[[][^A-Za-z]*[A-Za-z]/', '', $tmp);
