@@ -16,6 +16,7 @@ class Target
   public $ignore;
   public $isFile;
   public $noDecoration;
+  public $noTimestamp;
 
   function __construct(
     $stream,

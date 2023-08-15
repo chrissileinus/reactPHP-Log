@@ -96,9 +96,11 @@ class Writer
           $tmp = preg_replace('/\e[[][^A-Za-z]*[A-Za-z]/', '', $tmp);
         }
 
-        if (
-          $target->stream instanceof \React\Stream\WritableStreamInterface
-        ) {
+        if (is_string($target->stream) && $writeIntoFile) {
+          file_put_contents($target->stream, $tmp . PHP_EOL, FILE_APPEND);
+        }
+
+        if ($target->stream instanceof \React\Stream\WritableStreamInterface) {
           if ($target->isFile && $writeIntoFile) {
             $target->stream->write($tmp . PHP_EOL);
           }
