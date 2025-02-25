@@ -65,12 +65,12 @@ class Writer
     }
   }
 
-  static public function formatedTime()
+  static public function formattedTime()
   {
     return (new \DateTime("now", new \DateTimeZone(self::$timeZone)))->format(self::$timeFormat);
   }
 
-  static public function formatedTimeFromTimestamp(int $timestamp): string
+  static public function formattedTimeFromTimestamp(int $timestamp): string
   {
     return (new \DateTime())->setTimezone(new \DateTimeZone(self::$timeZone))->setTimestamp($timestamp)->format(self::$timeFormat);
   }
@@ -90,7 +90,7 @@ class Writer
       ) {
         $tmp = $output;
         if (!$target->noTimestamp) {
-          $tmp = self::formatedTime() . " ⁞" . $tmp;
+          $tmp = self::formattedTime() . " ⁞" . $tmp;
         }
         if ($target->noDecoration) {
           $tmp = preg_replace('/\e[[][^A-Za-z]*[A-Za-z]/', '', $tmp);
